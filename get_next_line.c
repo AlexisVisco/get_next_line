@@ -6,7 +6,7 @@
 /*   By: aviscogl <aviscogl@student.le101.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/20 18:11:24 by aviscogl          #+#    #+#             */
-/*   Updated: 2017/11/21 16:08:32 by aviscogl         ###   ########.fr       */
+/*   Updated: 2017/11/21 18:50:44 by aviscogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,47 +61,23 @@ int					get_next_line(const int fd, char **line)
 	int				i;
 
 	if (fd < 0 || read(fd, buf, 0) < 0 || line == NULL)
-	{
-		printf("cond arret 2");
 		return -1;
-	}
 	current = valid_list(&memorized, fd);
 	while ((stream_size = read(fd, buf, BUFF_SIZE)))
 	{
 		buf[stream_size] = '\0';
+		printf("%s", buf);
 		if(!(current->content = ft_strjoin(current->content, buf)))
-		{
-			printf("end ??\n");
-			return 0;
-		}
+			return (-1);
 		if (ft_strchr(buf, '\n'))
-		{
-			printf("hello\n");
 			break ;
-		}
 	}
-	if (stream_size < BUFF_SIZE && !ft_strlen((char *)current->content))
-	{
-		printf("|%c|\n", buf[0]);
+	if (stream_size < BUFF_SIZE && !ft_strlen(current->content))
 		return (0);
-	}
 	i = copyuntil(line, current->content, '\n');
 	if (i < (int)ft_strlen(current->content))
 		current->content += (i + 1);
 	else
 		ft_strclr(current->content);
 	return (1);
-}
-
-int		main(int n, char **argv)
-{
-	char *str;
-	if (n < 2 || n > 2)
-		return 0;
-	char *filename = argv[1];
-	int fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		return 0;
-	while(get_next_line(fd, &str) >= 1)
-		printf("- %s\n", str);
 }
