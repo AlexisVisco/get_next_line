@@ -6,33 +6,13 @@
 /*   By: aviscogl <aviscogl@student.le101.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/20 18:11:24 by aviscogl          #+#    #+#             */
-/*   Updated: 2017/11/20 21:10:43 by aviscogl         ###   ########.fr       */
+/*   Updated: 2017/11/21 16:08:32 by aviscogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-
-char	*ft_strjoinch(char const *s1, char c)
-{
-	char	*new_str;
-	size_t	i;
-	size_t	s1_len;
-
-	if (!s1 || !c)
-		return (NULL);
-	s1_len = ft_strlen(s1);
-	new_str = ft_strnew(s1_len + 1);
-	if (!new_str)
-		return (NULL);
-	i = -1;
-	while (++i < s1_len)
-		*(new_str + i) = *(s1 + i);
-	*(new_str + i) = c;
-	return (new_str);
-}
-
-int			copyuntil(char **dst, char *src, char c)
+int					copyuntil(char **dst, char *src, char c)
 {
 	int		i;
 	int		count;
@@ -48,14 +28,14 @@ int			copyuntil(char **dst, char *src, char c)
 		return (0);
 	while (src[count] && count < i)
 	{
-		if (!(*dst = ft_strjoinch(*dst, src[count])))
+		if (!(*dst = ft_strjoinchar(*dst, src[count])))
 			return (0);
 		count++;
 	}
 	return (pos);
 }
 
-static t_list	*valid_list(t_list **file, int fd)
+static t_list		*valid_list(t_list **file, int fd)
 {
 	t_list *tmp;
 
@@ -72,7 +52,7 @@ static t_list	*valid_list(t_list **file, int fd)
 	return (tmp);
 }
 
-int		get_next_line(const int fd, char **line)
+int					get_next_line(const int fd, char **line)
 {
 	char			buf[BUFF_SIZE + 1];
 	static t_list	*memorized;
@@ -81,18 +61,30 @@ int		get_next_line(const int fd, char **line)
 	int				i;
 
 	if (fd < 0 || read(fd, buf, 0) < 0 || line == NULL)
+	{
+		printf("cond arret 2");
 		return -1;
+	}
 	current = valid_list(&memorized, fd);
 	while ((stream_size = read(fd, buf, BUFF_SIZE)))
 	{
 		buf[stream_size] = '\0';
 		if(!(current->content = ft_strjoin(current->content, buf)))
+		{
+			printf("end ??\n");
 			return 0;
+		}
 		if (ft_strchr(buf, '\n'))
+		{
+			printf("hello\n");
 			break ;
+		}
 	}
-	if (stream_size < BUFF_SIZE && !ft_strlen(current->content))
+	if (stream_size < BUFF_SIZE && !ft_strlen((char *)current->content))
+	{
+		printf("|%c|\n", buf[0]);
 		return (0);
+	}
 	i = copyuntil(line, current->content, '\n');
 	if (i < (int)ft_strlen(current->content))
 		current->content += (i + 1);
