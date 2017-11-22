@@ -6,13 +6,13 @@
 /*   By: aviscogl <aviscogl@student.le101.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/20 18:11:24 by aviscogl          #+#    #+#             */
-/*   Updated: 2017/11/21 18:50:44 by aviscogl         ###   ########.fr       */
+/*   Updated: 2017/11/22 09:27:28 by aviscogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int					copyuntil(char **dst, char *src, char c)
+int					cpun(char **dst, char *src, char c)
 {
 	int		i;
 	int		count;
@@ -61,21 +61,20 @@ int					get_next_line(const int fd, char **line)
 	int				i;
 
 	if (fd < 0 || read(fd, buf, 0) < 0 || line == NULL)
-		return -1;
+		return (-1);
 	current = valid_list(&memorized, fd);
 	while ((stream_size = read(fd, buf, BUFF_SIZE)))
 	{
 		buf[stream_size] = '\0';
 		printf("%s", buf);
-		if(!(current->content = ft_strjoin(current->content, buf)))
+		if (!(current->content = ft_strjoin(current->content, buf)))
 			return (-1);
 		if (ft_strchr(buf, '\n'))
 			break ;
 	}
 	if (stream_size < BUFF_SIZE && !ft_strlen(current->content))
 		return (0);
-	i = copyuntil(line, current->content, '\n');
-	if (i < (int)ft_strlen(current->content))
+	if ((i = cpun(line, current->content, '\n')) < ft_strlen(current->content))
 		current->content += (i + 1);
 	else
 		ft_strclr(current->content);
