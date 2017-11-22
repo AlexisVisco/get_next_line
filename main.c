@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aviscogl <aviscogl@student.le101.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/22 09:29:36 by aviscogl          #+#    #+#             */
-/*   Updated: 2017/11/22 14:00:13 by aviscogl         ###   ########.fr       */
+/*   Created: 2017/11/22 09:39:15 by aviscogl          #+#    #+#             */
+/*   Updated: 2017/11/22 13:37:29 by aviscogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include <stdio.h>
+#include <fcntl.h>
 
-# include "libft.h"
-# include <stdlib.h>
-# include <fcntl.h>
-
-# define BUFF_SIZE 42
-
-typedef struct		s_content
-{
-	char			*str;
-	int				i;
-}					t_content;
-
+#define BUFF_SIZE 42
 
 int		get_next_line(const int fd, char **line);
 
-#endif
+int		main()
+{
+	char *str;
+	int fd = open("sample", O_RDONLY);
+	while(get_next_line(fd, &str))
+	{
+		printf("%s\n", str);
+	}
+}

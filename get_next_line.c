@@ -6,33 +6,31 @@
 /*   By: aviscogl <aviscogl@student.le101.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/20 18:11:24 by aviscogl          #+#    #+#             */
-/*   Updated: 2017/11/22 09:38:37 by aviscogl         ###   ########.fr       */
+/*   Updated: 2017/11/22 14:55:50 by aviscogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 int					copyuntil(char **dst, char *src, char c)
 {
 	int		i;
 	int		count;
-	int		pos;
 
 	i = -1;
 	count = 0;
 	while (src[++i])
 		if (src[i] == c)
 			break ;
-	pos = i;
 	if (!(*dst = ft_strnew(i)))
 		return (0);
 	while (src[count] && count < i)
 	{
-		if (!(*dst = ft_strjoinchar(*dst, src[count])))
-			return (0);
+		(*dst)[count] = src[count];
 		count++;
 	}
-	return (pos);
+	return (i);
 }
 
 static t_list		*valid_list(t_list **file, int fd)
