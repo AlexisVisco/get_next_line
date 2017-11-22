@@ -6,7 +6,7 @@
 #    By: aviscogl <aviscogl@student.le101.fr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/17 14:07:28 by aviscogl          #+#    #+#              #
-#    Updated: 2017/11/20 21:06:54 by aviscogl         ###   ########.fr        #
+#    Updated: 2017/11/22 09:36:52 by aviscogl         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,7 +86,7 @@ math_log.c \
 math_round.c
 
 OBJS= $(C_FILES:.c=.o)
-INC= libft.h
+INC= includes/libft.h
 
 all: $(NAME)
 
@@ -94,7 +94,7 @@ $(NAME): $(OBJS) $(INC)
 	ar rcs $(NAME) $(OBJS)
 
 ./%.o: ./%.c
-	$(CC) $(CC_FLAGS) -c $< -o $@
+	$(CC) $(CC_FLAGS) -I includes/ -c $< -o $@
 
 clean:
 	@rm -f $(OBJS)
