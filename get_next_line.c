@@ -6,7 +6,7 @@
 /*   By: aviscogl <aviscogl@student.le101.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/20 18:11:24 by aviscogl          #+#    #+#             */
-/*   Updated: 2017/11/22 14:55:50 by aviscogl         ###   ########.fr       */
+/*   Updated: 2017/11/22 15:41:31 by aviscogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,10 @@ int					get_next_line(const int fd, char **line)
 			break ;
 	}
 	if (stream_size < BUFF_SIZE && !ft_strlen(current->content))
+	{
+		free(current->content);
 		return (0);
+	}
 	i = copyuntil(line, current->content, '\n');
 	if (i < (int)ft_strlen(current->content))
 		current->content += (i + 1);
