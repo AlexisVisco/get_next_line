@@ -1,13 +1,14 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aviscogl <aviscogl@student.le101.fr>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/22 09:29:36 by aviscogl          #+#    #+#             */
-/*   Updated: 2017/11/22 14:00:13 by aviscogl         ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   get_next_line.h                                  .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: aviscogl <aviscogl@student.le101.fr>       +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2017/11/22 09:29:36 by aviscogl     #+#   ##    ##    #+#       */
+/*   Updated: 2017/11/23 15:08:38 by aviscogl    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
@@ -17,11 +18,12 @@
 # include <stdlib.h>
 # include <fcntl.h>
 
-# define BUFF_SIZE 42
+# define BUFF_SIZE 16
 
 typedef struct		s_content
 {
 	char			*str;
+	int				fd;
 	int				i;
 }					t_content;
 

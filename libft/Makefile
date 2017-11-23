@@ -1,16 +1,16 @@
 # **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: aviscogl <aviscogl@student.le101.fr>       +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2017/11/17 14:07:28 by aviscogl          #+#    #+#              #
-#    Updated: 2017/11/22 09:36:52 by aviscogl         ###   ########.fr        #
-#                                                                              #
+#                                                           LE - /             #
+#                                                               /              #
+#    Makefile                                         .::    .:/ .      .::    #
+#                                                  +:+:+   +:    +:  +:+:+     #
+#    By: aviscogl <aviscogl@student.le101.fr>       +:+   +:    +:    +:+      #
+#                                                  #+#   #+    #+    #+#       #
+#    Created: 2017/11/17 14:07:28 by aviscogl     #+#   ##    ##    #+#        #
+#    Updated: 2017/11/23 14:41:20 by aviscogl    ###    #+. /#+    ###.fr      #
+#                                                          /                   #
+#                                                         /                    #
 # **************************************************************************** #
 
-NAME = libft.a
 
 CC = gcc
 CC_FLAGS = -Wall -Wextra -Werror
@@ -91,10 +91,10 @@ INC= includes/libft.h
 all: $(NAME)
 
 $(NAME): $(OBJS) $(INC)
-	ar rcs $(NAME) $(OBJS)
+	@ar rcs $(NAME) $(OBJS)
 
 ./%.o: ./%.c
-	$(CC) $(CC_FLAGS) -I includes/ -c $< -o $@
+	@$(CC) $(CC_FLAGS) -I includes/ -c $< -o $@
 
 clean:
 	@rm -f $(OBJS)

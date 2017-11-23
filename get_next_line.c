@@ -1,83 +1,90 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aviscogl <aviscogl@student.le101.fr>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/20 18:11:24 by aviscogl          #+#    #+#             */
-/*   Updated: 2017/11/22 15:41:31 by aviscogl         ###   ########.fr       */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   get_next_line.c                                  .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: aviscogl <aviscogl@student.le101.fr>       +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2017/11/23 10:31:13 by aviscogl     #+#   ##    ##    #+#       */
+/*   Updated: 2017/11/23 15:16:00 by aviscogl    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-int					copyuntil(char **dst, char *src, char c)
+int				copyuntil(char **dst, char *src, char *er)
 {
-	int		i;
-	int		count;
+	int i;
 
-	i = -1;
-	count = 0;
-	while (src[++i])
-		if (src[i] == c)
-			break ;
+	i = 0;
+	while (src[i] != '\n' && src[i] != '\0')
+		i++;
 	if (!(*dst = ft_strnew(i)))
-		return (0);
-	while (src[count] && count < i)
+		return ((*er = 1));
+	i = 0;
+	while (src[i] != '\n' && src[i] != '\0')
 	{
-		(*dst)[count] = src[count];
-		count++;
+		(*dst)[i] = src[i];
+		i++;
 	}
+	if (src[i] == '\n')
+		return (i + 1);
 	return (i);
 }
 
-static t_list		*valid_list(t_list **file, int fd)
+int				join_mem_buf(char **memorized, int fd, int *last, char *er)
 {
-	t_list *tmp;
+	char	buf[BUFF_SIZE + 1];
+	int		stream_size;
+	char	*tmp;
+	char	first_apple;
 
-	tmp = *file;
-	while (tmp)
+	first_apple = 0;
+	while ((stream_size = read(fd, buf, BUFF_SIZE)) > 0)
 	{
-		if ((int)tmp->content_size == fd)
-			return (tmp);
-		tmp = tmp->next;
-	}
-	tmp = ft_lstnew("\0", fd);
-	ft_lstadd(file, tmp);
-	tmp = *file;
-	return (tmp);
-}
-
-int					get_next_line(const int fd, char **line)
-{
-	char			buf[BUFF_SIZE + 1];
-	static t_list	*memorized;
-	t_list			*current;
-	int				stream_size;
-	int				i;
-
-	if (fd < 0 || read(fd, buf, 0) < 0 || line == NULL)
-		return (-1);
-	current = valid_list(&memorized, fd);
-	while ((stream_size = read(fd, buf, BUFF_SIZE)))
-	{
+		first_apple = 1;
 		buf[stream_size] = '\0';
-		if (!(current->content = ft_strjoin(current->content, buf)))
-			return (-1);
+		if (!(tmp = ft_strjoin((!*memorized ? "" : *memorized + *last), buf)))
+			return (*er = 1);
+		*last = 0;
+		if (*memorized)
+			free(*memorized);
+		*memorized = tmp;
 		if (ft_strchr(buf, '\n'))
 			break ;
 	}
-	if (stream_size < BUFF_SIZE && !ft_strlen(current->content))
+	if (stream_size < 0)
+		return (*er = 1);
+	return (!first_apple && !ft_strlen((*memorized) + (*last)));
+}
+
+int				get_next_line(const int fd, char **line)
+{
+	static char		*memorized = NULL;
+	static int		last = 0;
+	char			eof;
+	char			er;
+
+	eof = 0;
+	er = 0;
+	if (fd < 0 || line == NULL)
+		return (-1);
+	if (memorized && ft_strchr(memorized + last, '\n'))
 	{
-		free(current->content);
-		return (0);
+		last += copyuntil(line, memorized + last, &er);
+		if (er)
+			return (-1);
+		return (1);
 	}
-	i = copyuntil(line, current->content, '\n');
-	if (i < (int)ft_strlen(current->content))
-		current->content += (i + 1);
-	else
-		ft_strclr(current->content);
+	eof = join_mem_buf(&memorized, fd, &last, &er);
+	if (er)
+		return (-1);
+	if (eof)
+		return (0);
+	last += copyuntil(line, memorized + last, &er);
+	if (er)
+		return (-1);
 	return (1);
 }
